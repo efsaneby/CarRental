@@ -1,8 +1,6 @@
-﻿using Core.DataAcces;
-using Core.DataAcces.EntityFramework;
+﻿using Core.DataAcces.EntityFramework;
 using DataAcces.Abstract;
 using Entities.Concrete;
-using Entities.DTOs;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -13,9 +11,9 @@ using System.Threading.Tasks;
 
 namespace DataAcces.Concrete.EntityFramework
 {
-    public class EfCarDal : EfEntityRepositoryBase<Car, CarRentalContext>, ICarDal
+    public class EfColorDal : EfEntityRepositoryBase<Color, CarRentalContext>, IColorDal
     {
-        public void Add(Car entity)
+        public void Add(Color entity)
         {
             using (CarRentalContext context = new CarRentalContext())
             {
@@ -25,7 +23,7 @@ namespace DataAcces.Concrete.EntityFramework
             }
         }
 
-        public void Delete(Car entity)
+        public void Delete(Color entity)
         {
             using (CarRentalContext context = new CarRentalContext())
             {
@@ -35,55 +33,41 @@ namespace DataAcces.Concrete.EntityFramework
             }
         }
 
-        public List<Car> GetAll(Expression<Func<Car, bool>> filter = null)
+        public List<Color> GetAll(Expression<Func<Color, bool>> filter = null)
         {
             using (CarRentalContext context = new CarRentalContext())
             {
-                return filter == null ? context.Set<Car>().ToList() : context.Set<Car>().Where(filter).ToList();
+                return filter == null ? context.Set<Color>().ToList() : context.Set<Color>().Where(filter).ToList();
             }
         }
 
 
 
-        public Car GetById(Expression<Func<Car, bool>> filter)
+        public Color GetById(Expression<Func<Color, bool>> filter)
         {
             using (CarRentalContext context = new CarRentalContext())
             {
-                return context.Set<Car>().SingleOrDefault(filter);
+                return context.Set<Color>().SingleOrDefault(filter);
             }
         }
 
-        public List<CarDetailDto> GetCarDetails()
+        public List<Color> GetCarsByBrandId(Expression<Func<Color, bool>> filter)
         {
             using (CarRentalContext context = new CarRentalContext())
             {
-                var result = from car in context.Cars
-                             join color in context.Colors
-                             on car.Id equals color.Id
-                             join brand in context.Brands
-                             on car.Id equals brand.Id
-                             select new CarDetailDto { CarName = car.Name, BrandName = brand.Name, ColorName = color.Name, DailyPrice = car.DailyPrice };
-                return result.ToList();
+                return context.Set<Color>().Where(filter).ToList();
             }
         }
 
-        public List<Car> GetCarsByBrandId(Expression<Func<Car, bool>> filter)
+        public List<Color> GetCarsByColorId(Expression<Func<Color, bool>> filter)
         {
             using (CarRentalContext context = new CarRentalContext())
             {
-                return context.Set<Car>().Where(filter).ToList();
+                return context.Set<Color>().Where(filter).ToList();
             }
         }
 
-        public List<Car> GetCarsByColorId(Expression<Func<Car, bool>> filter)
-        {
-            using (CarRentalContext context = new CarRentalContext())
-            {
-                return context.Set<Car>().Where(filter).ToList();
-            }
-        }
-
-        public void Update(Car entity)
+        public void Update(Color entity)
         {
             using (CarRentalContext context = new CarRentalContext())
             {
